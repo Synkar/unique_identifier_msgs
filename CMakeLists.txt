@@ -1,34 +1,36 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.0.2)
 project(unique_identifier_msgs)
 
-# Default to C++14
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
-endif()
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  # we dont use add_compile_options with pedantic in message packages
-  # because the Python C extensions dont comply with it
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
-endif()
-
-find_package(ament_cmake REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
-
-set(msg_files
-  "msg/UUID.msg"
+find_package(catkin REQUIRED COMPONENTS
+  message_generation
 )
 
-rosidl_generate_interfaces(${PROJECT_NAME} ${msg_files})
+## Generate messages in the 'msg' folder
+add_message_files(
+  FILES
+  UUID.msg
+)
 
-ament_export_dependencies(rosidl_default_runtime)
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+  # DEPENDENCIES
+)
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
-endif()
+###################################
+## catkin specific configuration ##
+###################################
+catkin_package(
+#  INCLUDE_DIRS include
+#  LIBRARIES synkar_msgs
+  CATKIN_DEPENDS message_runtime
+#  DEPENDS system_lib
+)
 
-ament_package()
+###########
+## Build ##
+###########
 
-install(
-  FILES mapping_rules.yaml
-  DESTINATION share/${PROJECT_NAME})
+include_directories(
+# include
+  ${catkin_INCLUDE_DIRS}
+)
